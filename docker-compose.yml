@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+
+  express-docker:
+    container_name: express-docker
+    build: .
+    environment:
+      - PORT=80
+    ports:
+      - "3000:80"

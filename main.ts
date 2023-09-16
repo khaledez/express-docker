@@ -8,6 +8,10 @@ app.get("/", (req, res) => {
 })
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-	console.log(`Starting express on port ${port}`)
+const server = app.listen(port, () => {
+	console.log(`Starting A new server on port ${port}`)
+})
+
+process.on("SIGHUP", () => {
+	server.close()
 })
