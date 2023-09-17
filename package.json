@@ -5,7 +5,7 @@
   "type": "module",
   "main": "main.ts",
   "scripts": {
-    "start": "tsc --project . & node ./dist/main.js",
+    "start": "tsc & node ./dist/main.js",
     "dev": "nodemon --exec 'ts-node --esm ./main.ts'",
     "build": "tsc --project .",
     "test": "jest"

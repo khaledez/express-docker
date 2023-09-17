@@ -2,16 +2,31 @@ version: '3'
 
 services:
   mysql:
+    container_name: db
     image: mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=very_secr3t
+      - MYSQL_ROOT_PASSWORD=$DB_PASSWORD
       - MYSQL_DATABASE=express-docker
     ports:
       - "3306:3306"
-  # express-docker:
-  #   container_name: express-docker
-  #   build: .
-  #   environment:
-  #     - PORT=80
-  #   ports:
-  #     - "3000:80"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+
+  express-docker:
+    profiles:
+      - in_docker
+    container_name: express-docker
+    build: .
+    environment:
+      - PORT=80
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=$DB_PASSWORD
+      - DB_NAME=express-docker
+    ports:
+      - "3000:80"
+    depends_on:
+      mysql:
+        condition: service_healthy

@@ -1,5 +1,7 @@
 import "dotenv/config";
 import express from "express";
+import { SignalConstants } from "node:os";
+import process from "node:process";
 import "reflect-metadata";
 import { UsersController } from "./src/users/controller.js";
 
@@ -18,6 +20,10 @@ const server = app.listen(port, () => {
 	console.log(`Starting A new server on port ${port}`)
 })
 
-process.on("SIGHUP", () => {
-	server.close()
-})
+async function handleShutdown(signal: SignalConstants) {
+	console.log(`received ${signal}`)
+	await server.close()
+	process.exit(0)
+}
+
+process.on("SIGTERM", handleShutdown)
