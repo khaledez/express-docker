@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "dist/main.js",
+  "main": "main.ts",
   "scripts": {
     "start": "tsc --project . & node ./dist/main.js",
-    "dev": "nodemon --exec 'ts-node-esm ./main.ts'",
+    "dev": "nodemon --exec 'ts-node --esm ./main.ts'",
     "build": "tsc --project .",
     "test": "jest"
   },
@@ -21,7 +21,11 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "class-transformer": "^0.5.1",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "mysql2": "^3.6.1",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.3.17"
   }
 }
