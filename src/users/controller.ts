@@ -4,15 +4,16 @@ import database from "../database.js";
 import { User } from "./model.js";
 
 const controller = express.Router();
-const usersRepo = database.getRepository(User);
 
 controller.get("/", async (req, res) => {
-	res.json(await usersRepo.find())
+	const repo = (await database).getRepository(User);
+	res.json(await repo.find())
 })
 
 controller.post("/", async (req: Request, res) => {
+	const repo = (await database).getRepository(User);
 	const newUser = plainToClass(User, req.body)
-	const result = await usersRepo.save(newUser)
+	const result = await repo.save(newUser)
 	res.json(result)
 })
 
