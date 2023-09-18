@@ -20,6 +20,12 @@ async function initDB(host: string, database: string, username: string, password
 	return AppDataSource
 }
 
-const dbPromise = initDB(process.env.DB_HOST!, process.env.DB_NAME!, process.env.DB_USER!, process.env.DB_PASSWORD!, process.env.DB_PORT || "3306") 
+const dbPromise = initDB(
+	process.env.DB_HOST!,
+	process.env.DB_NAME!,
+	process.env.DB_USER!,
+	process.env.DB_PASSWORD!,
+	process.env.DB_PORT || "3306"
+)
 
 export default dbPromise
