@@ -1,5 +1,5 @@
 # The base image that will have node dep
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Set the current working directory in the container
 WORKDIR /usr/app

@@ -1,19 +1,25 @@
 import "dotenv/config";
 import express from "express";
+import morgan from "morgan";
 import { SignalConstants } from "node:os";
 import process from "node:process";
 import "reflect-metadata";
-import { UsersController } from "./src/users/controller.js";
+import { Container } from "typedi";
+import { configureDB } from "./src/database.js";
+import UsersController from "./src/users/controller.js";
+
+const dbHandler = await configureDB()
 
 const app = express();
 
 app.use(express.json())
+app.use(morgan("combined"));
 
 app.get("/", (req, res) => {
 	res.json({ msg: "Hello from express" })
 })
 
-app.use("/users", UsersController)
+app.use("/users", Container.get(UsersController).router)
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
@@ -22,7 +28,8 @@ const server = app.listen(port, () => {
 
 async function handleShutdown(signal: SignalConstants) {
 	console.log(`received ${signal}`)
-	await server.close()
+	server.close()
+	await dbHandler.close()
 	process.exit(0)
 }
 

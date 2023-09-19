@@ -1,20 +1,32 @@
 import { plainToClass } from "class-transformer";
-import express, { Request } from "express";
-import database from "../database.js";
+import express, { Request, Response, Router } from "express";
+import { Inject, Service } from "typedi";
+import { DataSource, Repository } from "typeorm";
 import { User } from "./model.js";
 
-const controller = express.Router();
+@Service()
+export default class UsersController {
+	public readonly router: Router
+	private repository: Repository<User>
 
-controller.get("/", async (req, res) => {
-	const repo = (await database).getRepository(User);
-	res.json(await repo.find())
-})
+	constructor(@Inject("DATASOURCE") private db: DataSource) {
+		this.router = express.Router()
+		this.repository = this.db.getRepository(User)
 
-controller.post("/", async (req: Request, res) => {
-	const repo = (await database).getRepository(User);
-	const newUser = plainToClass(User, req.body)
-	const result = await repo.save(newUser)
-	res.json(result)
-})
+		this.router.get("/", this.findAll.bind(this))
+		this.router.post("/", this.createUser.bind(this))
+	}
 
-export const UsersController = controller
+	async findAll(req: Request, res: Response) {
+		const users = await this.repository.find();
+
+		res.json(users)
+	}
+
+	async createUser(req: Request, res: Response) {
+		const newUser = plainToClass(User, req.body);
+		const result = await this.repository.save(newUser);
+
+		res.json(result)
+	}
+}
