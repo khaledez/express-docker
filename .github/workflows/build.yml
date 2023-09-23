@@ -38,3 +38,5 @@ jobs:
         ssh-private-key: ${{ secrets.DEPLOYMENT_KEY }}
     - name: deploy
       run: docker compose -f docker-compose-prod.yml up -d
+    - name: print logs
+      run: docker compose logs
