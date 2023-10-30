@@ -21,15 +21,10 @@ sudo apt update
 
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-# create github user
-sudo mkdir -p /home/app
-sudo useradd --no-create-home --home-dir /home/app --shell /bin/bash github
-sudo usermod --append --groups docker github
 sudo usermod --append --groups docker ubuntu
-sudo chown github:github -R /home/app
 
 github_pubkey='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHbh3ETq9fVsTym2UW8Fqk3D1NziO5/C77m6KM9h4ROS khaledez@me.com'
 
-sudo -u github sh -c "mkdir -p /home/app/.ssh && echo $github_pubkey > /home/app/.ssh/authorized_keys"
+echo $github_pubkey >> $HOME/.ssh/authorized_keys
 
 sudo reboot
